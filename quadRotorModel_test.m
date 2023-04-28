@@ -108,18 +108,18 @@ xlabel('x'); ylabel('y'); zlabel('z');
 figure;
 subplot(3, 1, 1);
 plot(time_V, phi); title('phi in x direction');
-%hold on;
-%plot(phi_theta_epsi.Data(:, 1));
+hold on;
+yline(omega_d(1)*180/pi, 'Color', 'red');
 grid on; %legend('my solver', 'simulink');
 subplot(3, 1, 2);
 plot(time_V, theta); title('theta in y direction');
-%hold on;
-%plot(phi_theta_epsi.Data(:, 2));
+hold on;
+yline(omega_d(2)*180/pi, 'Color', 'red');
 grid on; %legend('my solver', 'simulink');
 subplot(3, 1, 3);
 plot(time_V, psi); title('epsi in z direction');
-%hold on;
-%plot(phi_theta_epsi.Data(:, 3));
+hold on;
+yline(omega_d(3)*180/pi, 'Color', 'red');
 grid on; %legend('my solver', 'simulink');
 
 
