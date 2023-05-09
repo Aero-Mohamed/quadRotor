@@ -1,7 +1,7 @@
 classdef RigidBodySolver < handle
     
     properties
-       Mass, Inertia, invInertia, dt, g , currentWr2omegaDot
+       Mass, Inertia, invInertia, dt, g , currentWr2omegaDot, inertial2Body
     end
     
     methods
@@ -39,8 +39,10 @@ classdef RigidBodySolver < handle
             c_epsi = C.epsi;
             s_phi = S.phi;
             c_phi = C.phi;
-
-            Forces = forces + inertia2Body(RBS, S, C)*[
+            
+            RBS.inertial2Body = inertia2Body(RBS, S, C);
+            
+            Forces = forces + RBS.inertial2Body*[
                 0;
                 0;
                 RBS.Mass*RBS.g

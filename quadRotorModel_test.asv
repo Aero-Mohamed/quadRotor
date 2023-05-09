@@ -46,7 +46,7 @@ rigidBodySolver = RigidBodySolver(Mass, Inertia, Ts, g);
 dForces(1, :) = [0 0 -Mass*g];
 dMoments(1, :) = [0 0 0];
 
-%% LQR Controller Gains
+%% Controller Gains
 run('lqr_linearized_feedback_system');
 
 %% Simulation
@@ -65,6 +65,8 @@ for i =1:timeSteps
     dMoments(i+1, :) = thrust_moment(2:4)';
 end
 
+%% Simulink
+%sim('quadRotor.slx');
 
 %% Plotting
 u = result(1,:);        p = result(4,:)*180/pi;
