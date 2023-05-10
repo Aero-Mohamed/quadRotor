@@ -20,9 +20,9 @@ K_matrix = [...
     K_tor -K_tor K_tor -K_tor
 ];
 K_matrix_inv = inv(K_matrix);
-u_0 = [11903.8 11903.9 11904.0 11903.9]';
+
 % [u; v; w; p; q; r; phi; theta; epsi; xe0; ye0; ze0]
-initialState = [0; 0; 0; 20*pi/180; 15*pi/180; 0; 10*pi/180; 0; 0; 0; 0; 0]; %% example of free fall0
+initialState = [0; 0; 0; 0*pi/180; 0*pi/180; 0; 0*pi/180; 0; 0; 0; 0; 0]; %% example of free fall0
 gravity_Iframe = [0;0;Mass*g];
 
 
@@ -37,8 +37,8 @@ dMoments = NaN(timeSteps, 3);
 result(:, 1) = initialState;
 
 %% Desired values - ref signal
-z_d = 10;
-omega_d = [0*pi/180;0;0]; % phi theta epsi
+z_d = -10;
+omega_d = [0;0;0]; % phi theta epsi
 
 %% inital rigid body solver
 rigidBodySolver = RigidBodySolver(Mass, Inertia, Ts, g);
@@ -79,10 +79,10 @@ Vtotal = (u.^2 + v.^2 + w.^2).^(0.5);
 
 beta_deg = asind(v./Vtotal); alpha_deg = atand(w./u);
 
-plot3(x,y,z); title('Position');
-zlim([-15 15]);
-fig1.CurrentAxes.ZDir = 'Reverse';
-fig1.CurrentAxes.YDir = 'Reverse';
+plot3(x,-y,-z); title('Position');
+text(x(1),-y(1), -z(1),'\leftarrow Start Position', 'Color', 'red', 'FontSize', 10);
+text(x(end),-y(end), -z(end),'\leftarrow Final Position')
+zlim([-15 15]);xlim([-15 15]); ylim([-15 15]);
 grid on;
 xlabel('x'); ylabel('y'); zlabel('z');
 
@@ -152,7 +152,7 @@ grid on;
 %% Plotting Input Forces & Moments
 figure;
 subplot(1, 2, 1); 
-plot(time_V, dForces(:, 3));title('Force');
+plot(time_V, dForces(:, 3));title('Force In Body F');
 xlabel('time (sec)', 'Interpreter', 'latex');
 ylabel('Z-Force');
 legend({'$F_{z}$'},'Interpreter', 'latex', 'FontSize', 14);
@@ -201,7 +201,7 @@ function u = controller_lqr(Inertia, Mass, g, K_matrix_inv, rigidBodySolver, ome
     v1_sat = saturation([-4 4]);
     u1 = Mass*(v1_sat.evaluate(v1) + g);
     u2 = 1/b1*(v2 - a1*phi_theta_epsi_dot(2)*phi_theta_epsi_dot(3));
-    u3 = 1/b2*(v3 - a2*phi_theta_epsi_dot(1)*phi_theta_epsi_dot(3))
+    u3 = 1/b2*(v3 - a2*phi_theta_epsi_dot(1)*phi_theta_epsi_dot(3));
     u4 = 1/b3*(v4 - a3*phi_theta_epsi_dot(1)*phi_theta_epsi_dot(2));
        
     % Forces & Moments to Motor Rotional Speeds
